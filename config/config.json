@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "root",
+    "password": "jaz",
+    "database": "burgers_db",
+    "host": "localhost",
+    "port": 3306,
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "b0835bb5af95e3",
+    "password": "dbf178f1",
+    "database": "heroku_4c03a191bb55d38",
+    "host": "us-cdbr-iron-east-04.cleardb.net",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "b0835bb5af95e3",
+    "password": "dbf178f1",
+    "database": "heroku_4c03a191bb55d38",
+    "host": "us-cdbr-iron-east-04.cleardb.net",
+    "dialect": "mysql"
+  }
+}
+

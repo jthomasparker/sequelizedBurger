@@ -3,13 +3,13 @@ $(document).ready(function(){
     $(".devour").on('click', function(){
         var newState;
         var id = $(this).data('id')
-        if($(this).data('state') === 0){
+        if($(this).data('state') === false){
             newState = {
-                devoured: 1
+                devoured: true
             };
         } else {
             newState = {
-                devoured: 0
+                devoured: false
             }
         }
         $.ajax('/api/burgers/' + id, {

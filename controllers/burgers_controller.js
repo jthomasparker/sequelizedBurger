@@ -1,45 +1,43 @@
-var express = require('express')
-var burger = require('../models/burger.js')
-var router = express.Router();
+
+var db = require('../models')
 var rows;
-//module.exports = function(app){
-router.get('/', function(req, res){
-    burger.selectAll(function(data){
-        rows = data.length
-        var hbsObject = {
-            burgers: data
-        }
-        console.log(hbsObject)
-        res.render("index", hbsObject)
+
+module.exports = function(app){
+    // gets all burgers
+    app.get('/', function(req, res){
+        db.Burger.findAll({}).then(function(data){
+            // set rows to # of rows for later (to force clearDB to increment id by 1)
+            rows = data.length;
+            var hbsObject = {
+                burgers: data
+            }
+            res.render("index", hbsObject)
+        });
+    });
+
+    // updates a burger's devoured state
+    app.put('/api/burgers/:id', function(req, res){
+        db.Burger.update(
+            req.body,
+            {
+                where: {
+                    id: req.params.id
+                }
+            }
+        ).then(function(result){
+            res.json(result)
+        }) 
     })
-})
 
-router.put('/api/burgers/:id', function(req, res){
-    var condition = "id = " + req.params.id;
-    burger.update({
-        devoured: req.body.devoured
-    }, condition, function(result){
-        console.log(result)
-       
-          if(res.changedRows === 0){
-               return res.sendStatus(404).end();
-           }  else {
-               res.sendStatus(200).end()
-           }
+    // creates a new burger, increments id by rows + 1
+    app.post('/api/burgers/:name', function(req, res){
+        var newBurger = {
+            id: rows + 1,
+            burger_name: req.params.name,
+            devoured: false
         }
-    )
-})
-
-router.post('/api/burgers/:name', function(req, res){
-    var id = rows + 1;
-    var name = req.params.name;
-    var columns = ["id", "burger_name", "devoured"]
-    var vals = [id, name, 0]
-    burger.insert(columns, vals, function(result){
-        console.log(res.json(result))
-        res.end()
+        db.Burger.create(newBurger).then(function(result){
+            res.json(result)
+        })
     })
-})
-
-//}
-module.exports = router;
+}
